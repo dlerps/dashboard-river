@@ -21,12 +21,12 @@ public class Utilities
 
     public static String getIsoDate(DateTime dt)
     {
-        return _indexDateFormatter.print(dt);
+        return _isoFormatter.print(dt);
     }
 
     public static String getIsoDate()
     {
-        return getIndexDate(DateTime.now());
+        return getIsoDate(DateTime.now());
     }
 
     private Utilities(){}

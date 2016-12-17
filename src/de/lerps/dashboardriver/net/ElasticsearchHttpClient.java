@@ -8,6 +8,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 
 import de.lerps.dashboardriver.model.*;
+import de.lerps.dashboardriver.utils.Utilities;
 import de.lerps.dashboardriver.GlobalConfig;
 
 public class ElasticsearchHttpClient
@@ -26,14 +27,15 @@ public class ElasticsearchHttpClient
 
     public <T extends BaseObject> String postEntry(String index, T payload)
     {
-        String url = _baseUrl + index + "/" + payload.getTypeName();
+        String url = getUrl(index, payload);
 
         System.out.println("POST to " + url);
-
-        HttpPost postRequest = new HttpPost(_baseUrl + index + "/" + payload.getTypeName());
+        System.out.println("PAYLOAD: " + payload.toJsonString());
+        
+        HttpPost postRequest = new HttpPost(url);
         HttpClient httpClient = new DefaultHttpClient();
 
-        String response = "";
+        StringBuilder response = new StringBuilder();
 
         StringEntity params = new StringEntity(payload.toJsonString(),"UTF-8");
         //StringEntity params = new StringEntity("{'test':'test'}","UTF-8");
@@ -45,20 +47,35 @@ public class ElasticsearchHttpClient
         try
         {
             HttpResponse httpResponse = httpClient.execute(postRequest);
-            response = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
 
-            System.out.println(httpResponse.getStatusLine().getStatusCode());
+            response.append(httpResponse.getStatusLine().getStatusCode());
+            response.append("\n");
+            response.append(EntityUtils.toString(httpResponse.getEntity(), "UTF-8"));
+            
+            //System.out.println(httpResponse.getStatusLine().getStatusCode());
         }
         catch(Exception ex0)
         {
             ex0.printStackTrace();
-            response = ex0.getMessage();
+            response.append(ex0.getMessage());
         }
         finally
         {
             httpClient.getConnectionManager().shutdown();
         }
 
-        return response;
+        return response.toString();
+    }
+
+    private String getUrl(String index, BaseObject obj)
+    {
+        StringBuilder url = new StringBuilder(_baseUrl)
+            .append(Utilities.getIndexDate())
+            .append("-")
+            .append(index)
+            .append("/")
+            .append(obj.getTypeName());
+
+        return url.toString();
     }
 }

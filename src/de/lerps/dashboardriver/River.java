@@ -1,6 +1,10 @@
 package de.lerps.dashboardriver;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
+
 import java.io.InputStream;
 
 import de.lerps.dashboardriver.net.*;
@@ -15,12 +19,34 @@ public class River
         ConfigLoader loader = new ConfigLoader();
         loader.init();
 
-        TestObject to = new TestObject("Hello World", "Whatever!");
-        System.out.println(to.toJsonString());
+        List<String> res = new ArrayList<String>(2);
 
-        ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
-        String res = esClient.postEntry("test0", to);
+        if(args == null || args.length == 0)
+        {
+            res.add("Insufficient arguments");
+        }
+        else
+        {
+            List<String> arguments = Arrays.asList(args);
 
-        System.out.println(res);
+            if(arguments.contains("test"))
+            {
+                TestObject to = new TestObject("Hello World", "Whatever!");
+
+                ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                res.add(esClient.postEntry("test0", to));
+            }
+            
+        }
+        
+        outputResponses(res);
+    }
+
+    private static void outputResponses(List<String> responses)
+    {
+        for(String res : responses)
+        {
+            System.out.println(res);
+        }
     }
 }
