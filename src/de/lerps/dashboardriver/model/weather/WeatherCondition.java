@@ -16,5 +16,5 @@ public class WeatherCondition
     public double humidity;
     public double windSpeed;
     public double visibility;
-    public double airePressure;                    
+    public double airPressure;
 }

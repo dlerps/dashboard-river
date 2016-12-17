@@ -8,9 +8,11 @@ import java.util.Properties;
 import java.io.InputStream;
 
 import de.lerps.dashboardriver.net.*;
+import de.lerps.dashboardriver.net.dummies.DummyWeatherClient;
 import de.lerps.dashboardriver.utils.ConfigLoader;
 import de.lerps.dashboardriver.GlobalConfig;
 import de.lerps.dashboardriver.model.*;
+import de.lerps.dashboardriver.model.weather.WeatherForecast;
 
 public class River
 {
@@ -36,7 +38,14 @@ public class River
                 ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
                 res.add(esClient.postEntry("test0", to));
             }
-            
+            if(arguments.contains("weather"))
+            {
+                IWeatherClient weatherClient = new DummyWeatherClient();
+                WeatherForecast forecast = weatherClient.getWeatherForecast();
+
+                ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                res.add(esClient.postEntry("dummy-weather", forecast));
+            }
         }
         
         outputResponses(res);
