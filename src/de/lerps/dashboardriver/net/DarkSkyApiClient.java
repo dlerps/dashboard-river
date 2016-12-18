@@ -3,6 +3,8 @@ package de.lerps.dashboardriver.net;
 import java.io.IOException;
 import java.util.Map;
 
+import com.google.gson.*;
+
 import de.lerps.dashboardriver.GlobalConfig;
 import de.lerps.dashboardriver.model.weather.WeatherForecast;
 import de.lerps.dashboardriver.net.HttpConnection;
@@ -31,6 +33,7 @@ public class DarkSkyApiClient implements IWeatherClient
         fio.setUnits(ForecastIO.UNITS_SI);
         fio.setExcludeURL("hourly,minutely");
 
+        String responseBody = null;
         String url = fio.getUrl(Double.toString(latitude), Double.toString(longitude));
         url = url.replaceAll("forecast.io", "darksky.net");
 
@@ -41,12 +44,29 @@ public class DarkSkyApiClient implements IWeatherClient
             HttpResponse response = HttpConnection.getRequest(url);
 
             System.out.println(response.getStatusLine().getStatusCode());
-            System.out.println("\n");
-            System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
+            //System.out.println("\n");
+            //System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
+
+            responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+        }
+
+        if(responseBody != null)
+        {
+            Gson gs = new GsonBuilder().create();
+
+            try
+            {
+                Map<String, Object> mapped = gs.fromJson(responseBody, Map.class);
+                return WeatherForecast.fromApiResponse(mapped);
+            } 
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         return null;

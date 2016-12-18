@@ -2,19 +2,24 @@ package de.lerps.dashboardriver.model.weather;
 
 public class WeatherCondition 
 {
-    public String time;
-    public String icon;
-    public String precipType;
-    public String condition;
-    
-    public double nearestStormDistance;
     public double precipIntensity;
+    public double precipIntensityMax;
     public double precipProbability;
-    public double precipIntensityError;
-    public double temperature;
-    public double temperatureFelt;
+    public double temperatureMax;
+    public double temperatureMin;
+    public double temperatureFeltMax;
+    public double temperatureFeltMin;
     public double humidity;
     public double windSpeed;
     public double visibility;
     public double airPressure;
+
+    public String time;
+    public String condition;
+    public String icon;
+    public String sunrise;
+    public String sunset;
+    public String temperatureMinTime;
+    public String temperatureMaxTime;
+    public String precipType;
 }

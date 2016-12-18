@@ -50,7 +50,10 @@ public class River
                     // res.add(esClient.postEntry("dummy-weather", forecast));
 
                     IWeatherClient weatherClient = new DarkSkyApiClient();
-                    weatherClient.getWeatherForecast();
+                    WeatherForecast forecast = weatherClient.getWeatherForecast();
+
+                    ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                    res.add(esClient.postEntry("weather", forecast));
                 }
                 else
                 {
