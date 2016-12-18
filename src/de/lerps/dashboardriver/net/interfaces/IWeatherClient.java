@@ -1,4 +1,4 @@
-package de.lerps.dashboardriver.net;
+package de.lerps.dashboardriver.net.interfaces;
 
 import de.lerps.dashboardriver.model.weather.WeatherForecast;
 

@@ -5,9 +5,11 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.httpcomponents:httpclient:4.5.2'
+    compile "org.apache.httpcomponents:httpclient:4.5.2"
     compile "joda-time:joda-time:2.9.6"
     compile "com.google.code.gson:gson:2.8.0"
+    compile "com.github.dvdme:ForecastIOLib:1.5.5"
+    //compile "com.eclipsesource.minimal-json:minimal-json:0.9.1"
 }
 
 sourceSets {

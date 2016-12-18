@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import java.io.InputStream;
 
+import de.lerps.dashboardriver.net.interfaces.*;
 import de.lerps.dashboardriver.net.*;
 import de.lerps.dashboardriver.net.dummies.DummyWeatherClient;
 import de.lerps.dashboardriver.utils.ConfigLoader;
@@ -27,25 +28,39 @@ public class River
         {
             res.add("Insufficient arguments");
         }
-        else
+        else if(GlobalConfig.elasticsearchUrl != null)
         {
             List<String> arguments = Arrays.asList(args);
 
             if(arguments.contains("test"))
             {
-                TestObject to = new TestObject("Hello World", "Whatever!");
+                TestObject to = new TestObject("Good night world", "Whatever...");
 
                 ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
                 res.add(esClient.postEntry("test0", to));
             }
             if(arguments.contains("weather"))
             {
-                IWeatherClient weatherClient = new DummyWeatherClient();
-                WeatherForecast forecast = weatherClient.getWeatherForecast();
+                if(GlobalConfig.darkSkyApiKey != null)
+                {
+                    // IWeatherClient weatherClient = new DummyWeatherClient();
+                    // WeatherForecast forecast = weatherClient.getWeatherForecast();
 
-                ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
-                res.add(esClient.postEntry("dummy-weather", forecast));
+                    // ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                    // res.add(esClient.postEntry("dummy-weather", forecast));
+
+                    IWeatherClient weatherClient = new DarkSkyApiClient();
+                    weatherClient.getWeatherForecast();
+                }
+                else
+                {
+                    res.add("Missing Weather API Key in global configuration file");
+                }
             }
+        }
+        else
+        {
+            res.add("No Elasticsearch Url provided in global configuration file");
         }
         
         outputResponses(res);

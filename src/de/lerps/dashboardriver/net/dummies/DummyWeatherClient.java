@@ -4,7 +4,7 @@ import org.joda.time.*;
 
 import de.lerps.dashboardriver.model.weather.WeatherCondition;
 import de.lerps.dashboardriver.model.weather.WeatherForecast;
-import de.lerps.dashboardriver.net.IWeatherClient;
+import de.lerps.dashboardriver.net.interfaces.IWeatherClient;
 import de.lerps.dashboardriver.utils.Utilities;
 
 public class DummyWeatherClient implements IWeatherClient
