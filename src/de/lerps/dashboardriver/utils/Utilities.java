@@ -44,8 +44,28 @@ public class Utilities
         {
             try
             {
-                System.out.println(key + " : " + map.get(key));
+                //System.out.println(key + " : " + map.get(key));
                 val = (double) map.get(key);
+            }
+            catch(Exception e1)
+            {
+                System.out.println("Could not parse " + key + " as double from map");
+            }
+        }
+
+        return val;
+    }
+
+    public static int parseIntegerFromMap(Map<String, Object> map, String key)
+    {
+        int val = -1;
+
+        if(map != null && map.containsKey(key))
+        {
+            try
+            {
+                String num = map.get(key).toString();
+                val = Double.valueOf(num).intValue();
             }
             catch(Exception e1)
             {
@@ -66,10 +86,8 @@ public class Utilities
             {
                 String num = map.get(key).toString();
                 num = num.replace("E", "E+0");
-                //System.out.println("Parsed long " + num);
                 
                 val = Double.valueOf(num).longValue();
-                //System.out.println("Parsed long " + val);
             }
             catch(Exception e1)
             {

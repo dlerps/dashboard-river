@@ -69,10 +69,12 @@ public class River
                         IHabiticaClient habiticaApi = new HabiticaApiClient(acc.userId, acc.apiKey, acc.displayName);
                         HabiticaUserStatistics stats = habiticaApi.getUserStatistics();
 
+                        //System.out.println(stats.toJsonString());
+
                         if(stats != null)
                         {
                             ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
-                            res.add(esClient.postEntry("habitic-" + acc.displayName, stats));
+                            res.add(esClient.postEntry("habitica-" + acc.displayName.toLowerCase(), stats));
                         }
                     }
                 }

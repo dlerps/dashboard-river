@@ -10,6 +10,8 @@ import de.lerps.dashboardriver.model.habitica.HabiticaUserStatistics;
 import de.lerps.dashboardriver.net.HttpConnection;
 import de.lerps.dashboardriver.net.interfaces.IHabiticaClient;
 
+import com.google.gson.*;
+
 public class HabiticaApiClient implements IHabiticaClient
 {
     private String _apiKey;
@@ -63,7 +65,24 @@ public class HabiticaApiClient implements IHabiticaClient
             e.printStackTrace();
         }
 
-        System.out.println(responseBody);
+        //System.out.println(responseBody);
+
+        if(responseBody != null)
+        {
+            Gson gs = new GsonBuilder().create();
+
+            try
+            {
+                Map<String, Object> mapped = gs.fromJson(responseBody, Map.class);
+                HabiticaUserStatistics stats = HabiticaUserStatistics.fromApiResponse(mapped);
+
+                return stats;
+            } 
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
         return null;
     }
