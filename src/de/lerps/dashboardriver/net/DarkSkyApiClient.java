@@ -1,6 +1,5 @@
 package de.lerps.dashboardriver.net;
 
-import java.io.IOException;
 import java.util.Map;
 
 import com.google.gson.*;
@@ -41,15 +40,13 @@ public class DarkSkyApiClient implements IWeatherClient
 
         try 
         {
-            HttpResponse response = HttpConnection.getRequest(url);
+            ApiResponse response = HttpConnection.getRequest(url);
 
-            System.out.println(response.getStatusLine().getStatusCode());
-            //System.out.println("\n");
-            //System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
+            System.out.println(response.statusCode);
 
-            responseBody = EntityUtils.toString(response.getEntity(), "UTF-8");
+            responseBody = response.body;
         } 
-        catch (IOException e) 
+        catch (Exception e) 
         {
             e.printStackTrace();
         }

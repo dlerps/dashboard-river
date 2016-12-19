@@ -50,9 +50,9 @@ public class HttpConnection
         return response.toString();
     }
 
-    public static HttpResponse getRequest(String url, Map<String, String> headers)
+    public static ApiResponse getRequest(String url, Map<String, String> headers)
     {
-        HttpResponse response = null;
+        ApiResponse response = null;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet getRequest = new HttpGet(url);
         
@@ -63,7 +63,12 @@ public class HttpConnection
 
         try
         {
-            response = httpClient.execute(getRequest);
+            HttpResponse res = httpClient.execute(getRequest);
+
+            response = new ApiResponse();
+            response.statusCode = res.getStatusLine().getStatusCode();
+            response.body = EntityUtils.toString(res.getEntity(), "UTF-8");
+            //System.out.println(EntityUtils.toString(res.getEntity(), "UTF-8"));
         }
         catch(Exception ex10)
         {
@@ -77,7 +82,7 @@ public class HttpConnection
         return response;
     }
 
-    public static HttpResponse getRequest(String url)
+    public static ApiResponse getRequest(String url)
     {
         return getRequest(url, new HashMap<String, String>(1));
     }

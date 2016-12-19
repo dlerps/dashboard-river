@@ -1,0 +1,70 @@
+package de.lerps.dashboardriver.net;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+
+import de.lerps.dashboardriver.model.habitica.HabiticaUserStatistics;
+import de.lerps.dashboardriver.net.HttpConnection;
+import de.lerps.dashboardriver.net.interfaces.IHabiticaClient;
+
+public class HabiticaApiClient implements IHabiticaClient
+{
+    private String _apiKey;
+    private String _apiBaseUrl;
+    private String _userId;
+    private String _displayName;
+
+    public HabiticaApiClient(String userId, String apiKey, String displayName) throws IllegalArgumentException
+    {
+        if(apiKey == null)
+        {
+            throw new IllegalArgumentException("No API key provided");
+        }
+
+        if(userId == null)
+        {
+            throw new IllegalArgumentException("No user id provided");
+        }
+
+        _apiBaseUrl = "https://habitica.com/api/v3/";
+
+        _apiKey = apiKey;
+        _userId = userId;
+        _displayName = displayName;
+    }
+
+    @Override
+    public HabiticaUserStatistics getUserStatistics()
+    {
+        String url = _apiBaseUrl + "user";
+        String responseBody = null;
+
+        Map<String, String> headers = new HashMap<String, String>(2);
+        headers.put("x-api-user", _userId);
+        headers.put("x-api-key", _apiKey);
+
+        System.out.println("Requesting " + _displayName + " Habitica Data from " + url);
+        // System.out.println("API User " + _userId);
+        // System.out.println("API Key " + _apiKey);
+
+        try 
+        {
+            ApiResponse response = HttpConnection.getRequest(url, headers);
+
+            System.out.println(response.statusCode);
+
+            responseBody = response.body;
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println(responseBody);
+
+        return null;
+    }
+}

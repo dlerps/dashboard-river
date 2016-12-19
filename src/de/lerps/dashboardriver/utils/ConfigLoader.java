@@ -28,6 +28,8 @@ public class ConfigLoader
 
             GlobalConfig.elasticsearchUrl = config.getProperty("elasticsearch_url");
             GlobalConfig.darkSkyApiKey = config.getProperty("dark_sky_api_key");
+            GlobalConfig.habiticaAccounts = HabiticaAccount.fromProperty(config.getProperty("habitica_accounts"));
+
             String latitude = config.getProperty("weather_latitude");
             String longitude = config.getProperty("weather_longitude");
 
@@ -41,8 +43,6 @@ public class ConfigLoader
                 GlobalConfig.weatherLongitude = 0.0;
                 GlobalConfig.weatherLatitude = 0.0;
             }
-
-            //System.out.println("Loaded: " + GlobalConfig.elasticsearchUrl);
         }
         catch(Exception ex)
         {
@@ -55,10 +55,6 @@ public class ConfigLoader
                 in.close();
             }
             catch(Exception ex0){}
-
-            //defualt values
-            //GlobalConfig.elasticsearchUrl = GlobalConfig.elasticsearchUrl != null ? GlobalConfig.elasticsearchUrl : "http://192.168.44.100:9200/";
-            //GlobalConfig.darkSkyApiKey = GlobalConfig.darkSkyApiKey != null ? GlobalConfig.darkSkyApiKey : "";
         }
     }
 }
