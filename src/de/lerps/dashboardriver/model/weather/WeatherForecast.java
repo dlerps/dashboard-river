@@ -129,6 +129,8 @@ public class WeatherForecast extends BaseObject
             c.visibility = Utilities.parseDoubleFromMap(conditionMap, "visibility");
             c.windSpeed = Utilities.parseDoubleFromMap(conditionMap, "windSpeed");
             c.time = Utilities.parseIsoTimeFromMap(conditionMap, "time");
+            c.sunset = Utilities.parseIsoTimeFromMap(conditionMap, "sunsetTime");
+            c.sunrise = Utilities.parseIsoTimeFromMap(conditionMap, "sunriseTime");
         }
 
         return c;

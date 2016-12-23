@@ -49,8 +49,6 @@ public class HabiticaApiClient implements IHabiticaClient
         headers.put("x-api-key", _apiKey);
 
         System.out.println("Requesting " + _displayName + " Habitica Data from " + url);
-        // System.out.println("API User " + _userId);
-        // System.out.println("API Key " + _apiKey);
 
         try 
         {

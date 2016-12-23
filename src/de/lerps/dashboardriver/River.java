@@ -14,6 +14,7 @@ import de.lerps.dashboardriver.utils.*;
 import de.lerps.dashboardriver.GlobalConfig;
 import de.lerps.dashboardriver.model.*;
 import de.lerps.dashboardriver.model.habitica.HabiticaUserStatistics;
+import de.lerps.dashboardriver.model.headline.Newspaper;
 import de.lerps.dashboardriver.model.weather.WeatherForecast;
 
 public class River
@@ -60,6 +61,27 @@ public class River
                 }
             }
 
+            if(arguments.contains("headlines"))
+            {
+                if(GlobalConfig.bingNewsApiKey != null)
+                {
+                    IHeadlineClient newsClient = new BingNewsApiClient(GlobalConfig.bingNewsApiKey, GlobalConfig.newsPerCategory);
+                    Newspaper news = newsClient.getNewspaper();
+
+                    //System.out.println(news.toJsonString());
+
+                    if(news != null)
+                    {
+                        ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                        res.add(esClient.postEntry("headlines", news));
+                    }
+                }
+                else
+                {
+                    res.add("Missing Bing News API Key in global configuration file");
+                }
+            }
+
             if(arguments.contains("habitica"))
             {
                 if(GlobalConfig.habiticaAccounts != null)
@@ -68,8 +90,6 @@ public class River
                     {
                         IHabiticaClient habiticaApi = new HabiticaApiClient(acc.userId, acc.apiKey, acc.displayName);
                         HabiticaUserStatistics stats = habiticaApi.getUserStatistics();
-
-                        //System.out.println(stats.toJsonString());
 
                         if(stats != null)
                         {

@@ -27,11 +27,22 @@ public class ConfigLoader
             }
 
             GlobalConfig.elasticsearchUrl = config.getProperty("elasticsearch_url");
+            GlobalConfig.bingNewsApiKey = config.getProperty("bing_news_api_key");
             GlobalConfig.darkSkyApiKey = config.getProperty("dark_sky_api_key");
             GlobalConfig.habiticaAccounts = HabiticaAccount.fromProperty(config.getProperty("habitica_accounts"));
 
             String latitude = config.getProperty("weather_latitude");
             String longitude = config.getProperty("weather_longitude");
+            String newsNum = config.getProperty("news_per_category");
+
+            try
+            {
+                GlobalConfig.newsPerCategory = newsNum != null ? Integer.parseInt(newsNum) : 5;
+            }
+            catch(Exception e1)
+            {
+                GlobalConfig.newsPerCategory = 5;
+            }
 
             if(latitude != null && longitude != null)
             {

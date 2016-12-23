@@ -8,9 +8,12 @@ public class GlobalConfig
 {
     public static String elasticsearchUrl;
     public static String darkSkyApiKey;
+    public static String bingNewsApiKey;
 
     public static double weatherLongitude;
     public static double weatherLatitude;
+
+    public static int newsPerCategory;
 
     public static List<HabiticaAccount> habiticaAccounts;
 
