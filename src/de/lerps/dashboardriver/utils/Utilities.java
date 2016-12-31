@@ -10,7 +10,6 @@ public class Utilities
     private static DateTimeFormatter _isoFormatter = ISODateTimeFormat.dateTime();
     private static DateTimeFormatter _indexDateFormatter = DateTimeFormat.forPattern("yyyyMMdd");
     
-
     public static String getIndexDate(DateTime dt)
     {
         return _indexDateFormatter.print(dt);
@@ -19,6 +18,16 @@ public class Utilities
     public static String getIndexDate()
     {
         return getIndexDate(DateTime.now());
+    }
+
+    public static String getPastIndexDate(int daysOfAge)
+    {
+        daysOfAge = Math.abs(daysOfAge);
+        daysOfAge *= -1;
+
+        DateTime lastWeek = DateTime.now().plusDays(daysOfAge);
+
+        return getIndexDate(lastWeek);
     }
 
     public static String getIsoDate(DateTime dt)

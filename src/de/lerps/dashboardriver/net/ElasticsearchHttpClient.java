@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.lerps.dashboardriver.model.*;
+import de.lerps.dashboardriver.net.ApiResponse;
+import de.lerps.dashboardriver.net.HttpConnection;
 import de.lerps.dashboardriver.utils.Utilities;
 import de.lerps.dashboardriver.GlobalConfig;
 
@@ -38,6 +40,25 @@ public class ElasticsearchHttpClient
         params.setContentType("application/json");
 
         return HttpConnection.postRequest(url, params, headers);
+    }
+
+    public String deleteOldEntries(int daysOfAge)
+    {
+        String deleteUrl = new StringBuilder(_baseUrl)
+            .append(Utilities.getPastIndexDate(daysOfAge))
+            .append("-")
+            .append("*")
+            .toString();
+
+        ApiResponse response = HttpConnection.deleteRequest(deleteUrl);
+
+        return new StringBuilder("DELETE Request to ")
+            .append(deleteUrl)
+            .append(" returned:\n")
+            .append(response.statusCode)
+            .append("\n")
+            .append(response.body)
+            .toString();
     }
 
     private String getUrl(String index, BaseObject obj)

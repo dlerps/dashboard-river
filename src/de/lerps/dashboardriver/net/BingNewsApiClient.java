@@ -1,5 +1,6 @@
 package de.lerps.dashboardriver.net;
 
+import de.lerps.dashboardriver.GlobalConfig;
 import de.lerps.dashboardriver.model.headline.Headline;
 import de.lerps.dashboardriver.model.headline.Newspaper;
 import de.lerps.dashboardriver.net.interfaces.IHeadlineClient;
@@ -41,7 +42,7 @@ public class BingNewsApiClient implements IHeadlineClient
         paper.headlines.addAll(getGermanHeadlines());
         paper.headlines.addAll(getClippersHeadlines());
         paper.headlines.addAll(getWorldHeadlines());
-        paper.headlines.addAll(getMajorHeadlines());
+        //paper.headlines.addAll(getMajorHeadlines());
 
         Collections.shuffle(paper.headlines);
 
@@ -53,15 +54,15 @@ public class BingNewsApiClient implements IHeadlineClient
         StringBuilder requestUrl = new StringBuilder(_apiBaseUrl)
             .append("trendingtopics?");
 
-        return getHeadlines(requestUrl, "Trending Topics");
+        return getHeadlines(requestUrl, GlobalConfig.newsPerCategory, "Trending Topics");
     }
 
     private List<Headline> getWorldHeadlines()
     {
         StringBuilder requestUrl = new StringBuilder(_apiBaseUrl)
-            .append("?Category=World&");
+            .append("search?Category=World&mkt=en-au&");
 
-        return getHeadlines(requestUrl, "World News");
+        return getHeadlines(requestUrl, GlobalConfig.newsPerCategory, "World News");
     }
 
     private List<Headline> getWarriorsHeadlines()
@@ -85,7 +86,7 @@ public class BingNewsApiClient implements IHeadlineClient
             .append("search?safeSearch=Off&offset=0")
             .append("&mkt=de-de&freshness=Day&");
 
-        return getHeadlines(searchUrl, "German");
+        return getHeadlines(searchUrl, GlobalConfig.newsPerCategory, "German");
     }
 
     private List<Headline> getSportHeadlines(String team, String culture)
@@ -97,15 +98,15 @@ public class BingNewsApiClient implements IHeadlineClient
             .append(culture)
             .append("&freshness=Day&Category=Sports&");
 
-        return getHeadlines(searchUrl, "Sports");
+        return getHeadlines(searchUrl, GlobalConfig.newsPerSportsCategory, "Sports");
     }
 
-    private List<Headline> getHeadlines(StringBuilder urlPrototype, String category, Map<String, String> headers)
+    private List<Headline> getHeadlines(StringBuilder urlPrototype, String category, int numberOfResults, Map<String, String> headers)
     {
         String responseBody = null;
         String url = urlPrototype
             .append("count=")
-            .append(_newsPerCategory)
+            .append(numberOfResults)
             .toString();
 
         headers.put("Ocp-Apim-Subscription-Key", _apiKey);
@@ -147,8 +148,8 @@ public class BingNewsApiClient implements IHeadlineClient
         return null;
     }
 
-     private List<Headline> getHeadlines(StringBuilder url, String category)
+     private List<Headline> getHeadlines(StringBuilder url, int numberOfResults, String category)
      {
-         return getHeadlines(url, category, new HashMap<String, String>(1));
+         return getHeadlines(url, category, numberOfResults, new HashMap<String, String>(1));
      }
 }

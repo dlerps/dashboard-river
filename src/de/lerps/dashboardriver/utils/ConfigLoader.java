@@ -34,15 +34,11 @@ public class ConfigLoader
             String latitude = config.getProperty("weather_latitude");
             String longitude = config.getProperty("weather_longitude");
             String newsNum = config.getProperty("news_per_category");
+            String cleanupAge = config.getProperty("cleanup_age_days");
 
-            try
-            {
-                GlobalConfig.newsPerCategory = newsNum != null ? Integer.parseInt(newsNum) : 5;
-            }
-            catch(Exception e1)
-            {
-                GlobalConfig.newsPerCategory = 5;
-            }
+            GlobalConfig.newsPerCategory = getConfigInteger(config, "news_per_category", 10);
+            GlobalConfig.newsPerSportsCategory = getConfigInteger(config, "news_per_sports_category", 2);
+            GlobalConfig.cleanupAgeDays = getConfigInteger(config, "cleanup_age_days", 10);
 
             if(latitude != null && longitude != null)
             {
@@ -67,5 +63,26 @@ public class ConfigLoader
             }
             catch(Exception ex0){}
         }
+    }
+
+    private int getConfigInteger(Properties config, String configKey, int defaultVal)
+    {
+        int configVal = defaultVal;
+
+        if(config != null && configKey != null)
+        {
+            String configString = config.getProperty(configKey);
+
+            try
+            {
+                configVal = configString != null ? Integer.parseInt(configString) : defaultVal;
+            }
+            catch(Exception ex1)
+            {
+                configVal = defaultVal;
+            }
+        }
+
+        return configVal;
     }
 }

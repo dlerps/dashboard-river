@@ -14,6 +14,8 @@ public class GlobalConfig
     public static double weatherLatitude;
 
     public static int newsPerCategory;
+    public static int newsPerSportsCategory;
+    public static int cleanupAgeDays;
 
     public static List<HabiticaAccount> habiticaAccounts;
 

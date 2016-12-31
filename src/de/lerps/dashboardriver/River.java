@@ -103,6 +103,19 @@ public class River
                     res.add("Missing Habitica User Profile information in global configuration file");
                 }
             }
+
+            if(arguments.contains("cleanup"))
+            {
+                if(GlobalConfig.cleanupAgeDays > 0)
+                {
+                    ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+                    res.add(esClient.deleteOldEntries(GlobalConfig.cleanupAgeDays));
+                }
+                else
+                {
+                    res.add("Invalid cleanup settings in global configuration file");
+                }
+            }
         }
         else
         {

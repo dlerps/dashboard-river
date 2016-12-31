@@ -68,7 +68,6 @@ public class HttpConnection
             response = new ApiResponse();
             response.statusCode = res.getStatusLine().getStatusCode();
             response.body = EntityUtils.toString(res.getEntity(), "UTF-8");
-            //System.out.println(EntityUtils.toString(res.getEntity(), "UTF-8"));
         }
         catch(Exception ex10)
         {
@@ -85,5 +84,31 @@ public class HttpConnection
     public static ApiResponse getRequest(String url)
     {
         return getRequest(url, new HashMap<String, String>(1));
+    }
+
+    public static ApiResponse deleteRequest(String url)
+    {
+        ApiResponse response = null;
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpDelete getRequest = new HttpDelete(url);
+
+        try
+        {
+            HttpResponse res = httpClient.execute(getRequest);
+
+            response = new ApiResponse();
+            response.statusCode = res.getStatusLine().getStatusCode();
+            response.body = EntityUtils.toString(res.getEntity(), "UTF-8");
+        }
+        catch(Exception ex10)
+        {
+            ex10.printStackTrace();
+        }
+        finally
+        {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return response;
     }
 }
