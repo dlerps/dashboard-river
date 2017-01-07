@@ -11,9 +11,12 @@ import de.lerps.dashboardriver.net.ApiResponse;
 import de.lerps.dashboardriver.net.HttpConnection;
 import de.lerps.dashboardriver.utils.Utilities;
 import de.lerps.dashboardriver.GlobalConfig;
+import de.lerps.dashboardriver.model.logging.ApiAccessLog;
 
 public class ElasticsearchHttpClient
 {
+    private static final String ACCESS_LOG_NAME = "api-access-log";
+
     private String _baseUrl;
 
     public ElasticsearchHttpClient(String url)
@@ -59,6 +62,29 @@ public class ElasticsearchHttpClient
             .append("\n")
             .append(response.body)
             .toString();
+    }
+    
+    public static void logSuccessfulApiAccess(String api, String apiUrl)
+    {
+        ApiAccessLog apiAccess = new ApiAccessLog();
+        apiAccess.apiName = api;
+        apiAccess.url = apiUrl;
+        apiAccess.success = true;
+
+        ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+        esClient.postEntry(ACCESS_LOG_NAME, apiAccess);
+    }
+
+    public static void logFailedApiAccess(String api, String apiUrl, String error)
+    {
+        ApiAccessLog apiAccess = new ApiAccessLog();
+        apiAccess.apiName = api;
+        apiAccess.url = apiUrl;
+        apiAccess.success = false;
+        apiAccess.error = error;
+
+        ElasticsearchHttpClient esClient = new ElasticsearchHttpClient();
+        esClient.postEntry(ACCESS_LOG_NAME, apiAccess);
     }
 
     private String getUrl(String index, BaseObject obj)

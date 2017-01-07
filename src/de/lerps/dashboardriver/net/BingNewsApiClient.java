@@ -122,9 +122,12 @@ public class BingNewsApiClient implements IHeadlineClient
             System.out.println(response.statusCode);
 
             responseBody = response.body;
+            
+            ElasticsearchHttpClient.logSuccessfulApiAccess("BingNews", url);
         } 
         catch (Exception e) 
         {
+            ElasticsearchHttpClient.logFailedApiAccess("BingNews", url, e.getMessage());
             e.printStackTrace();
         }
 

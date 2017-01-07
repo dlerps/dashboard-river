@@ -57,9 +57,12 @@ public class HabiticaApiClient implements IHabiticaClient
             System.out.println(response.statusCode);
 
             responseBody = response.body;
+            
+            ElasticsearchHttpClient.logSuccessfulApiAccess("Habitica", url);
         } 
         catch (Exception e) 
         {
+            ElasticsearchHttpClient.logFailedApiAccess("Habitica", url, e.getMessage());
             e.printStackTrace();
         }
 

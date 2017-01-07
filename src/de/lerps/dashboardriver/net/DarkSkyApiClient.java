@@ -6,6 +6,7 @@ import com.google.gson.*;
 
 import de.lerps.dashboardriver.GlobalConfig;
 import de.lerps.dashboardriver.model.weather.WeatherForecast;
+import de.lerps.dashboardriver.net.ElasticsearchHttpClient;
 import de.lerps.dashboardriver.net.HttpConnection;
 import de.lerps.dashboardriver.net.interfaces.IWeatherClient;
 
@@ -45,9 +46,12 @@ public class DarkSkyApiClient implements IWeatherClient
             System.out.println(response.statusCode);
 
             responseBody = response.body;
+
+            ElasticsearchHttpClient.logSuccessfulApiAccess("DarkSky", url);
         } 
         catch (Exception e) 
         {
+            ElasticsearchHttpClient.logFailedApiAccess("DarkSky", url, e.getMessage());
             e.printStackTrace();
         }
 
